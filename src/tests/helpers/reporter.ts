@@ -6,7 +6,7 @@ import {
 import SuiteInfo = jasmine.SuiteInfo;
 
 function getTime() {
-  var now = new Date();
+  const now = new Date();
   return now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
 }
 

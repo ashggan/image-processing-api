@@ -1,8 +1,12 @@
 import express from 'express';
-import imageApi from './Api/image';
+import imageProcessApi from './Api/imageProcessing';
+import apicache from 'apicache';
+
+const cache = apicache.middleware;
 
 const Router = express.Router();
 
-Router.use('/images', imageApi);
+// image Processing Api
+Router.use('/images', cache('15 minutes'), imageProcessApi);
 
 export default Router;
