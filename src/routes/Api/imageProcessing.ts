@@ -4,23 +4,33 @@ import logger from '../../middleware/logger';
 const imageProcessApi = Router();
 
 // Endpoint to serve image from assets file
-imageProcessApi.use('/', (req: Request, res: Response, next: NextFunction) => {
-  try {
-    // parse query variables
-    const filename = <string>req.query.filename;
-    const height = parseInt(<string>req.query.height);
-    const width = parseInt(<string>req.query.width);
+imageProcessApi.use(
+  '/',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // parse query variables
+      const filename = <string>req.query.filename;
+      const height = parseInt(<string>req.query.height);
+      const width = parseInt(<string>req.query.width);
 
-    //   scale image accordingly
-    imageProcess.resizeimage(height, width, filename);
+      //   scale image accordingly
+      if (height && width) {
+        await imageProcess.resizeimage(height, width, filename);
+        // image processing logger
+        logger.info(
+          `image ${filename} was processed to size ${height}X${width}`
+        );
+      } else {
+        // image processing logger
+        logger.info(`image ${filename} was served`);
+      }
 
-    // image processing logger
-    logger.info(`image ${filename} was processed to size ${height}X${width}`);
-    res.set('Content-Type', 'image/png');
-    res.sendFile(filename, { root: 'assets/thumbs' });
-  } catch (error) {
-    next(error);
+      res.set('Content-Type', 'image/png');
+      res.sendFile(filename, { root: 'assets/thumbs' });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 export default imageProcessApi;
