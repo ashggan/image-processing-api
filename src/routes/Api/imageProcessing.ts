@@ -14,16 +14,10 @@ imageProcessApi.use(
       const width = parseInt(<string>req.query.width);
 
       //   scale image accordingly
-      if (height && width) {
-        await imageProcess.resizeimage(height, width, filename);
-        // image processing logger
-        logger.info(
-          `image ${filename} was processed to size ${height}X${width}`
-        );
-      } else {
-        // image processing logger
-        logger.info(`image ${filename} was served`);
-      }
+      await imageProcess.resizeimage(height, width, filename);
+
+      // image processing logger
+      logger.info(`image ${filename} was served`);
 
       res.set('Content-Type', 'image/png');
       res.sendFile(filename, { root: 'assets/thumbs' });

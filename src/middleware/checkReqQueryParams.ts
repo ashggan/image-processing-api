@@ -12,12 +12,11 @@ const validQueryParams = (req: Request, res: Response, next: NextFunction) => {
     return res.status(400).json({ error: 'filename doesnot exist' });
   }
   //  check height and width are numric values
-  if (height && width) {
-    if (isNotANumber(height) || isNotANumber(width)) {
-      return res
-        .status(400)
-        .json({ error: 'height and width must be numbers' });
-    }
+  if (!height || !width) {
+    return res.status(400).json({ error: 'height and width are required ' });
+  }
+  if (isNotANumber(height) || isNotANumber(width)) {
+    return res.status(400).json({ error: 'height and width must be numbers' });
   }
   next();
 };
